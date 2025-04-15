@@ -1,9 +1,11 @@
-import numpy as np
-import tensorflow as tf
 import random
 from collections import deque
+
 import gymnasium as gym
 import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
+
 # 设置随机种子
 np.random.seed(42)
 tf.random.set_seed(42)
@@ -27,20 +29,24 @@ memory_size = 10000
 state_size = env.observation_space.n
 action_size = env.action_space.n
 
+
 # 将离散状态转换为 one-hot 编码
 def one_hot(state, state_size):
-    return np.identity(state_size)[state:state+1]
+    return np.identity(state_size)[state : state + 1]
+
 
 # 构建 Q 网络
 def build_model():
-    model = tf.keras.Sequential([
-        tf.keras.layers.Input(shape=(state_size,)),
-        tf.keras.layers.Dense(64, activation='relu'),
-        tf.keras.layers.Dense(action_size)
-    ])
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate),
-                  loss='mse')
+    model = tf.keras.Sequential(
+        [
+            tf.keras.layers.Input(shape=(state_size,)),
+            tf.keras.layers.Dense(64, activation="relu"),
+            tf.keras.layers.Dense(action_size),
+        ]
+    )
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate), loss="mse")
     return model
+
 
 # 初始化 Q 网络和目标网络
 q_network = build_model()
@@ -50,12 +56,15 @@ target_network.set_weights(q_network.get_weights())
 # 经验回放缓冲区
 memory = deque(maxlen=memory_size)
 
+
 # 选择动作（epsilon-greedy）
 def get_action(state, epsilon):
     if np.random.rand() < epsilon:
         return np.random.randint(action_size)
     q_values = q_network.predict(state, verbose=0)
     return np.argmax(q_values[0])
+
+
 reward_list = []
 # 训练 DQN
 for episode in range(max_episodes):
@@ -99,7 +108,9 @@ for episode in range(max_episodes):
     if epsilon > epsilon_min:
         epsilon *= epsilon_decay
     reward_list.append(total_reward)
-    print(f"Episode {episode+1}/{max_episodes} - Total Reward: {total_reward} - Epsilon: {epsilon:.3f}")
+    print(
+        f"Episode {episode+1}/{max_episodes} - Total Reward: {total_reward} - Epsilon: {epsilon:.3f}"
+    )
 
 env.close()
 plt.plot(reward_list)

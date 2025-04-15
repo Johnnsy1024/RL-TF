@@ -1,11 +1,12 @@
-import tensorflow as tf
-import numpy as np
-import gym
 import random
 from collections import deque
 
+import gym
+import numpy as np
+import tensorflow as tf
+
 # 环境初始化
-env = gym.make('CartPole-v1')
+env = gym.make("CartPole-v1")
 num_actions = env.action_space.n
 state_shape = env.observation_space.shape
 
@@ -23,21 +24,27 @@ target_update_freq = 100
 # 经验回放缓存
 memory = deque(maxlen=memory_size)
 
+
 # 构建Q网络
 def build_q_network():
-    model = tf.keras.Sequential([
-        tf.keras.layers.Dense(24, activation='relu', input_shape=state_shape),
-        tf.keras.layers.Dense(24, activation='relu'),
-        tf.keras.layers.Dense(num_actions)
-    ])
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
-                  loss='mse')
+    model = tf.keras.Sequential(
+        [
+            tf.keras.layers.Dense(24, activation="relu", input_shape=state_shape),
+            tf.keras.layers.Dense(24, activation="relu"),
+            tf.keras.layers.Dense(num_actions),
+        ]
+    )
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate), loss="mse"
+    )
     return model
+
 
 # 初始化主网络和目标网络
 q_network = build_q_network()
 target_network = build_q_network()
 target_network.set_weights(q_network.get_weights())
+
 
 # ε-贪婪策略
 def get_action(state, epsilon):
@@ -45,6 +52,7 @@ def get_action(state, epsilon):
         return random.randrange(num_actions)
     q_values = q_network.predict(state[np.newaxis], verbose=0)
     return np.argmax(q_values[0])
+
 
 # Double DQN训练函数
 def train():
@@ -72,6 +80,7 @@ def train():
 
     q_network.fit(states, target_q, epochs=1, verbose=0)
 
+
 # 主循环
 num_episodes = 500
 steps = 0
@@ -95,7 +104,9 @@ for episode in range(num_episodes):
             target_network.set_weights(q_network.get_weights())
 
         if done:
-            print(f"Episode {episode+1}: Reward = {total_reward}, Epsilon = {epsilon:.3f}")
+            print(
+                f"Episode {episode+1}: Reward = {total_reward}, Epsilon = {epsilon:.3f}"
+            )
             break
 
     if epsilon > epsilon_min:
