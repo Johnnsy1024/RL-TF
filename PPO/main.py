@@ -7,7 +7,7 @@ import numpy as np
 
 actor_lr = 1e-3
 critic_lr = 1e-2
-num_episodes = 50
+num_episodes = 5000
 hidden_dim = 128
 gamma = 0.98
 lmbda = 0.95
