@@ -59,4 +59,4 @@ if __name__ == "__main__":
     plt.plot(episodes_list, return_list)
     plt.xlabel('Episodes')
     plt.ylabel('Returns')
-    plt.savefig("./prods/dqn_cliffwalking.png")
+    plt.savefig("./prods/dqn_cartpole.png")

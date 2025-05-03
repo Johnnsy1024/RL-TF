@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-
+from loguru import logger
 def compute_return(rewards, gamma):
     returns = np.zeros_like(rewards, dtype=np.float32)
     running_add = 0
@@ -27,7 +27,7 @@ def train_step(states, actions, returns, advantages, actor_net, critic_net, acto
             # 计算Critic损失
             value = critic_net(state)
             critic_loss += tf.square(return_ - value)
-
+        # logger.info(f"actor_loss: {actor_loss.numpy()}, critic_loss: {critic_loss.numpy()}")
         # 更新网络
         actor_gradients = actor_tape.gradient(actor_loss, actor_net.trainable_variables)
         critic_gradients = critic_tape.gradient(

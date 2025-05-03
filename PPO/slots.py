@@ -10,6 +10,6 @@ lmbda = args.lmbda
 epochs = args.epochs
 eps = args.eps
 
-env = gym.make('CliffWalking-v0')
-state_dim = env.observation_space.n
+env = gym.make('CartPole-v1')
+state_dim = env.observation_space.shape[0]
 action_dim = env.action_space.n

@@ -4,9 +4,10 @@ from agent import PPO
 import tensorflow as tf
 import numpy as np 
 from slots import env, state_dim, action_dim, actor_lr, critic_lr, num_episodes, hidden_dim, gamma, lmbda, epochs, eps
+from loguru import logger
 
 if __name__ == '__main__':
-    agent = PPO(env, hidden_dim, action_dim, actor_lr, critic_lr, lmbda,
+    agent = PPO(env, hidden_dim, state_dim, action_dim, actor_lr, critic_lr, lmbda,
             epochs, eps, gamma)
     return_list = []
     for i in range(10):
@@ -17,9 +18,9 @@ if __name__ == '__main__':
                 state = env.reset()[0]
                 done = False
                 while not done:
-                    state_one_hot = tf.one_hot(tf.convert_to_tensor(state, dtype=tf.int32), depth=state_dim, dtype=tf.int32)
-                    action = agent.take_action(state_one_hot)
-                    next_state, reward, done, trun, _ = env.step(int(action))
+                    action = agent.take_action(state)
+                    next_state, reward, terminated, truncated, _ = env.step(action)
+                    done = terminated or truncated
                     transition_dict['states'].append(state)
                     transition_dict['actions'].append(int(action))
                     transition_dict['next_states'].append(next_state)
@@ -36,4 +37,4 @@ if __name__ == '__main__':
     plt.plot(episodes_list, return_list)
     plt.xlabel('Episodes')
     plt.ylabel('Returns')
-    plt.savefig("./prods/ppo_cliffwalking.png")
+    plt.savefig("./prods/ppo_cartpole.png")
