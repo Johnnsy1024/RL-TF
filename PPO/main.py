@@ -1,24 +1,11 @@
 from matplotlib import pyplot as plt
 from tqdm import tqdm
 from agent import PPO
-import gym
 import tensorflow as tf
-import numpy as np
-
-actor_lr = 1e-3
-critic_lr = 1e-2
-num_episodes = 5000
-hidden_dim = 128
-gamma = 0.98
-lmbda = 0.95
-epochs = 10
-eps = 0.2
-
+import numpy as np 
+from slots import env, state_dim, action_dim, actor_lr, critic_lr, num_episodes, hidden_dim, gamma, lmbda, epochs, eps
 
 if __name__ == '__main__':
-    env = gym.make('CliffWalking-v0')
-    state_dim = env.observation_space.n
-    action_dim = env.action_space.n
     agent = PPO(env, hidden_dim, action_dim, actor_lr, critic_lr, lmbda,
             epochs, eps, gamma)
     return_list = []
@@ -28,14 +15,11 @@ if __name__ == '__main__':
                 episode_return = 0
                 transition_dict = {'states': [], 'actions': [], 'next_states': [], 'rewards': [], 'dones': []}
                 state = env.reset()[0]
-                # state = np.array(state[0]) if isinstance(state, tuple) or isinstance(state, list) else state
                 done = False
                 while not done:
                     state_one_hot = tf.one_hot(tf.convert_to_tensor(state, dtype=tf.int32), depth=state_dim, dtype=tf.int32)
                     action = agent.take_action(state_one_hot)
                     next_state, reward, done, trun, _ = env.step(int(action))
-                    # next_state = tf.convert_to_tensor(next_state, dtype=tf.int32)
-                    # next_state = tf.one_hot(next_state, depth=state_dim, dtype=tf.int32)
                     transition_dict['states'].append(state)
                     transition_dict['actions'].append(int(action))
                     transition_dict['next_states'].append(next_state)
@@ -52,10 +36,4 @@ if __name__ == '__main__':
     plt.plot(episodes_list, return_list)
     plt.xlabel('Episodes')
     plt.ylabel('Returns')
-    plt.show()
-
-    # mv_return = rl_utils.moving_average(return_list, 9)
-    # plt.plot(episodes_list, mv_return)
-    # plt.xlabel('Episodes')
-    # plt.ylabel('Returns')
-    # plt.show()
+    plt.savefig("./prods/ppo_cliffwalking.png")

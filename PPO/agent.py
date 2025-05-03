@@ -7,7 +7,7 @@ class PPO:
     def __init__(self, env: gym.Env, hidden_dim: int, action_dim: int, actor_lr: float, critic_lr: float, lmbda: float, epochs: int, eps: float, gamma: float):
         env_name = env.spec.id
         if env_name != "CliffWalking-v0":
-            raise ValueError("Unsupported environment: {}".format(env_name))
+            raise ValueError(f"Unsupported environment: {env_name}")
         self.action_dim = env.action_space.n
         self.state_dim = env.observation_space.n
         actor_input = tf.keras.Input(shape=(self.state_dim,), name='actor_input', dtype=tf.float32)
@@ -69,13 +69,3 @@ class PPO:
             critic_grads = critic_tape.gradient(critic_loss, self.critic.trainable_variables)
             self.actor_optimizer.apply_gradients(zip(actor_grads, self.actor.trainable_variables))
             self.critic_optimizer.apply_gradients(zip(critic_grads, self.critic.trainable_variables))
-            # log_probs = tf.math.log(self.actor(states).gather(1, actions))
-            # ratio = tf.math.exp(log_probs - old_log_probs)
-            # surr1 = ratio * advantage
-            # surr2 = tf.clip_by_value(ratio, 1 - self.eps, 1 + self.eps) * advantage  # 截断
-            # actor_loss = tf.math.reduce_mean(-tf.math.minimum(surr1, surr2))  # PPO损失函数
-            # critic_loss = tf.math.reduce_mean(tf.math.square(self.critic(states) - td_target))
-            # self.actor_optimizer.minimize(actor_loss)
-            # self.critic_optimizer.minimize(critic_loss)
-            # self.actor_optimizer.step()
-            # self.critic_optimizer.step()
