@@ -16,10 +16,12 @@ if __name__ == '__main__':
                 episode_return = 0
                 transition_dict = {'states': [], 'actions': [], 'next_states': [], 'rewards': [], 'dones': []}
                 state = env.reset()[0]
+                state = tf.one_hot(state, depth=state_dim)
                 done = False
                 while not done:
                     action = agent.take_action(state)
                     next_state, reward, terminated, truncated, _ = env.step(action)
+                    next_state = tf.one_hot(next_state, depth=state_dim)
                     done = terminated or truncated
                     transition_dict['states'].append(state)
                     transition_dict['actions'].append(int(action))
@@ -37,4 +39,4 @@ if __name__ == '__main__':
     plt.plot(episodes_list, return_list)
     plt.xlabel('Episodes')
     plt.ylabel('Returns')
-    plt.savefig("./prods/ppo_cartpole.png")
+    plt.savefig(f"./prods/ppo_{env.spec.name}.png")
