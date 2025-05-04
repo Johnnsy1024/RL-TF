@@ -36,13 +36,13 @@ if __name__ == "__main__":
                         next_states = tf.squeeze(tf.stack(next_states), axis=1)
                         q_values = agent.q_network.predict(states, verbose=0)
                         next_q_values = agent.target_network.predict(next_states, verbose=0)
-                        
+                        best_actions = np.argmax(agent.q_network.predict(next_states, verbose=0), axis=-1)
                         for b in range(batch_size):
                             target = rewards[b]
                             if not dones[b]:
                                 if dqn_type == 'double_dqn':
                                     # 主网络选动作+目标网络估值
-                                    best_action = np.argmax(agent.q_network.predict(next_states[b], verbose=0)[b])
+                                    best_action = best_actions[b]
                                     target += gamma * next_q_values[b][best_action]
                                 else:
                                     target += gamma * np.max(next_q_values[b])
