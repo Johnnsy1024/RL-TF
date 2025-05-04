@@ -37,16 +37,33 @@ if __name__ == "__main__":
                         q_values = agent.q_network.predict(states, verbose=0)
                         next_q_values = agent.target_network.predict(next_states, verbose=0)
                         best_actions = np.argmax(agent.q_network.predict(next_states, verbose=0), axis=-1)
-                        for b in range(batch_size):
-                            target = rewards[b]
-                            if not dones[b]:
-                                if dqn_type == 'double_dqn':
-                                    # 主网络选动作+目标网络估值
-                                    best_action = best_actions[b]
-                                    target += gamma * next_q_values[b][best_action]
-                                else:
-                                    target += gamma * np.max(next_q_values[b])
-                            q_values[b][actions[b]] = target
+                        # 初始化 target 为 rewards
+                        rewards = np.array(rewards, dtype=np.float32)
+                        dones = np.array(dones, dtype=bool)
+                        # 找出哪些是非终止状态
+                        non_terminal_mask = ~dones
+
+                        if dqn_type == 'double_dqn':
+                            # 对于 double DQN，用 best_actions 选择 next_q_values 中的值
+                            idx = np.arange(batch_size)
+                            rewards[non_terminal_mask] += gamma * next_q_values[non_terminal_mask, best_actions[non_terminal_mask]]
+                        else:
+                            # 普通 DQN，用最大 Q 值
+                            rewards[non_terminal_mask] += gamma * np.max(next_q_values[non_terminal_mask], axis=1)
+
+                        # 更新 q_values 中的目标值
+                        q_values[np.arange(batch_size), actions] = rewards
+
+                        # for b in range(batch_size):
+                        #     target = rewards[b]
+                        #     if not dones[b]:
+                        #         if dqn_type == 'double_dqn':
+                        #             # 主网络选动作+目标网络估值
+                        #             best_action = best_actions[b]
+                        #             target += gamma * next_q_values[b][best_action]
+                        #         else:
+                        #             target += gamma * np.max(next_q_values[b])
+                        #     q_values[b][actions[b]] = target
                         agent.q_network.fit(states, q_values, epochs=1, verbose=0)
                 agent.update_target_network(i_episode)
                 if epsilon > epsilon_min:

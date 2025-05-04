@@ -2,14 +2,14 @@ import tensorflow as tf
 from flags import args
 
 def build_model(action_size: int, inputs: tf.keras.Input):
-    x = tf.keras.layers.Dense(64, activation="selu")(inputs)
+    x = tf.keras.layers.Dense(128, activation="selu")(inputs)
     x = tf.keras.layers.Dense(action_size)(x)
     model = tf.keras.Model(inputs, x)
     model.compile(optimizer=tf.keras.optimizers.Adam(args.lr), loss='mse')
     return model
 
 def build_dueling_model(action_size: int, inputs: tf.keras.Input):
-    x = tf.keras.layers.Dense(64, activation="selu")(inputs)
+    x = tf.keras.layers.Dense(128, activation="selu")(inputs)
     x_v = tf.keras.layers.Dense(1)(x)
     x_a = tf.keras.layers.Dense(action_size)(x)
     mean_a = tf.reduce_mean(x_a, axis=-1, keepdims=True)
