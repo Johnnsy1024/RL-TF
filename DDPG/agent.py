@@ -39,6 +39,7 @@ class DDPG:
         state = tf.reshape(state, [1, self.state_dim])
         action = self.actor(state).numpy()[0]
         action_final = action + self.sigma * np.random.randn(self.action_dim)
+        action_final = np.clip(action_final, self.env.action_space.low, self.env.action_space.high)
         return action_final
     
     def soft_update(self, net: tf.keras.Model, target_net: tf.keras.Model):
