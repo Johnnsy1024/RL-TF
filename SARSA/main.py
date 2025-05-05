@@ -36,6 +36,6 @@ if __name__ == '__main__':
     plt.xlabel('Episodes')
     plt.ylabel('Returns')
     if method == "sarsa":
-        plt.savefig("./prods/sarsa_cliffwalking.png")
+        plt.savefig(f"./prods/sarsa_{env.spec.name}.png")
     else:
-        plt.savefig("./prods/qlearning_cliffwalking.png")
+        plt.savefig(f"./prods/qlearning_{env.spec.name}.png")

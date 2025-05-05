@@ -6,8 +6,8 @@ import numpy as np
 class SARSA:
     def __init__(self, env: gym.Env, epsilon_end: float=0.001, epsilon_start: float=0.95, epsilon_decay: int=200, alpha: float=0.05, gamma: float=0.95):  # 显式传入动作数
         env_name = env.spec.id
-        if env_name != "CliffWalking-v0":
-            raise ValueError(f"Unsupported environment: {env_name}")
+        # if env_name != "CliffWalking-v0":
+        #     raise ValueError(f"Unsupported environment: {env_name}")
         self.n_actions = env.action_space.n  # 先定义n_actions
         self.Q_table = defaultdict(lambda: np.zeros(self.n_actions))  # 初始化state-action值表,每个state默认的action值为0
 
