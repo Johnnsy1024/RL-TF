@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 
 if __name__ == "__main__":
-    agent = DDPG(env, state_dim, action_dim, hidden_dim, actor_lr, critic_lr, sigma, tau, gamma, batch_size, buffer_size)
+    agent = DDPG(env, state_dim, action_dim, hidden_dim, actor_lr, critic_lr, sigma, sigma_end, tau, gamma, batch_size, buffer_size)
     return_list = []
     for i in range(10):
         with tqdm(total=int(num_episodes/10), desc='Iteration %d' % i) as pbar:

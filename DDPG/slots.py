@@ -6,6 +6,7 @@ hidden_dim = args.hidden_dim
 actor_lr = args.actor_lr
 critic_lr = args.critic_lr
 sigma = args.sigma
+sigma_end = args.sigma_end
 tau = args.tau
 batch_size = args.batch_size
 buffer_size = args.buffer_size

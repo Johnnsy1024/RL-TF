@@ -5,7 +5,7 @@ import tensorflow as tf
 import gym
 
 class DDPG:
-    def __init__(self, env: gym.Env, state_dim: int, action_dim: int, hidden_dim: int, actor_lr: float, critic_lr: float, sigma: float, tau: float, gamma: float, batch_size: int, buffer_size: int):
+    def __init__(self, env: gym.Env, state_dim: int, action_dim: int, hidden_dim: int, actor_lr: float, critic_lr: float, sigma: float, sigma_end: float, tau: float, gamma: float, batch_size: int, buffer_size: int):
         self.env = env
         self.env_name = env.spec.name
         
@@ -27,6 +27,7 @@ class DDPG:
         self.critic_optimizer = tf.keras.optimizers.Adam(learning_rate=critic_lr)
         
         self.sigma = sigma
+        self.sigma_end = sigma_end
         self.tau = tau
         self.gamma = gamma
         
@@ -34,8 +35,12 @@ class DDPG:
         self.buffer_size = buffer_size
         
         self.memory = deque(maxlen=self.buffer_size)
+        
+        self.sample_count = 0
     
     def take_action(self, state):
+        self.sample_count += 1
+        self.simga = self.sigma_end + (self.sigma - self.sigma_end) * np.exp(-1. * self.sample_count / 1000)
         state = tf.reshape(state, [1, self.state_dim])
         action = self.actor(state).numpy()[0]
         action_final = action + self.sigma * np.random.randn(self.action_dim)
