@@ -1,7 +1,6 @@
 import gym
 from flags import args
 
-
 hidden_dim = args.hidden_dim
 actor_lr = args.actor_lr
 critic_lr = args.critic_lr
@@ -13,6 +12,6 @@ buffer_size = args.buffer_size
 gamma = args.gamma
 num_episodes = args.num_episodes
 
-env = gym.make('Pendulum-v1')
+env = gym.make("Pendulum-v1")
 state_dim = env.observation_space.shape[0]
 action_dim = env.action_space.shape[0]

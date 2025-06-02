@@ -1,7 +1,6 @@
 import gym
 from flags import args
 
-
 actor_lr = args.actor_lr
 critic_lr = args.critic_lr
 alpha_lr = args.alpha_lr
