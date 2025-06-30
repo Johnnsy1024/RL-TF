@@ -15,6 +15,9 @@ arg_parser.add_argument(
     choices=["normal", "ou"],
     default="normal",
 )
+arg_parser.add_argument("--policy_noise", type=float, help="policy noise", default=0.2)
+arg_parser.add_argument("--noise_clip", type=float, help="noise clip", default=0.5)
+arg_parser.add_argument("--policy_delay", type=int, help="policy_delay", default=2)
 arg_parser.add_argument("--tau", type=float, help="soft update rate", default=0.005)
 arg_parser.add_argument("--batch_size", type=int, help="batch_size", default=64)
 arg_parser.add_argument("--buffer_size", type=int, help="buffer_size", default=1000000)

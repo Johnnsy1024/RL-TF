@@ -12,6 +12,9 @@ BUFFER_SIZE = args.buffer_size
 GAMMA = args.gamma
 NUM_EPISODES = args.num_episodes
 NOISE_TYPE = args.noise_type
+POLICY_NOISE = args.policy_noise
+NOISE_CLIP = args.noise_clip
+POLICY_DELAY = args.policy_delay
 
 env = gym.make("Pendulum-v1")
 STATE_DIM = env.observation_space.shape[0]
