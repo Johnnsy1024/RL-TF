@@ -2,12 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from agent import TD3
-from model import build_actor_model, build_critic_model
 from slots import (
     ACTION_DIM,
     ACTOR_LR,
     BATCH_SIZE,
-    BUFFER_SIZE,
     CRITIC_LR,
     GAMMA,
     HIDDEN_DIM,
@@ -89,4 +87,4 @@ if __name__ == "__main__":
     plt.plot(episodes_list, return_list)
     plt.xlabel("Episodes")
     plt.ylabel("Returns")
-    plt.savefig(f"./prods/ddpg_{env.spec.name}_{NOISE_TYPE}.png")
+    plt.savefig(f"./prods/td3_{env.spec.name}_{NOISE_TYPE}.png")
