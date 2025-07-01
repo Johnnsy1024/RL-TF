@@ -66,7 +66,9 @@ class DDPG:
             critic_value = self.critic([state, action])
             critic_loss = tf.reduce_mean(tf.square(target_q - critic_value))
         grads = tape.gradient(critic_loss, self.critic.trainable_variables)
-        self.critic_optimizer.apply_gradients(zip(grads, self.critic.trainable_variables))
+        self.critic_optimizer.apply_gradients(
+            zip(grads, self.critic.trainable_variables)
+        )
         # 更新actor
         with tf.GradientTape() as tape:
             actions = self.actor(state)

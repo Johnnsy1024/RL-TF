@@ -1,6 +1,8 @@
 import numpy as np
 import tensorflow as tf
 from loguru import logger
+
+
 def compute_return(rewards, gamma):
     returns = np.zeros_like(rewards, dtype=np.float32)
     running_add = 0
@@ -9,12 +11,25 @@ def compute_return(rewards, gamma):
         returns[t] = running_add
     return returns
 
-def train_step(states, actions, returns, advantages, actor_net, critic_net, actor_optimizer, critic_optimizer):
+
+def train_step(
+    states,
+    actions,
+    returns,
+    advantages,
+    actor_net,
+    critic_net,
+    actor_optimizer,
+    critic_optimizer,
+):
     with tf.GradientTape() as actor_tape, tf.GradientTape() as critic_tape:
         actor_loss = 0
         critic_loss = 0
         for i in range(len(states)):
-            state = tf.reshape(tf.convert_to_tensor(states[i], dtype=tf.float32), [-1, states[i].shape[-1]])
+            state = tf.reshape(
+                tf.convert_to_tensor(states[i], dtype=tf.float32),
+                [-1, states[i].shape[-1]],
+            )
             action = actions[i]
             return_ = returns[i]
             advantage = advantages[i]

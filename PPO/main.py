@@ -1,7 +1,6 @@
 import numpy as np
 import tensorflow as tf
 from agent import PPO
-from loguru import logger
 from matplotlib import pyplot as plt
 from slots import (
     action_dim,

@@ -1,7 +1,6 @@
 import gym
 import numpy as np
 import tensorflow as tf
-from loguru import logger
 from model import build_actor_model, build_critic_model
 
 
@@ -82,10 +81,14 @@ class PPO:
                 surr2 = (
                     tf.clip_by_value(ratio, 1 - self.eps, 1 + self.eps) * advantage
                 )  # 截断
-                actor_loss = -tf.math.reduce_mean(tf.minimum(surr1, surr2))  # PPO损失函数
+                actor_loss = -tf.math.reduce_mean(
+                    tf.minimum(surr1, surr2)
+                )  # PPO损失函数
                 value_preds = tf.squeeze(self.critic(states), axis=1)
                 critic_loss = tf.math.reduce_mean(tf.square(td_target - value_preds))
-            actor_grads = actor_tape.gradient(actor_loss, self.actor.trainable_variables)
+            actor_grads = actor_tape.gradient(
+                actor_loss, self.actor.trainable_variables
+            )
             self.actor_optimizer.apply_gradients(
                 zip(actor_grads, self.actor.trainable_variables)
             )

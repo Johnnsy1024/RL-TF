@@ -14,7 +14,9 @@ def build_actor_model(
 
 def build_critic_model(state_dim: int, action_dim: int, hidden_dim: int):
     state_input = tf.keras.layers.Input(shape=(state_dim,), name="critic_input: state")
-    action_input = tf.keras.layers.Input(shape=(action_dim,), name="critic_input: action")
+    action_input = tf.keras.layers.Input(
+        shape=(action_dim,), name="critic_input: action"
+    )
     concat = tf.keras.layers.Concatenate()([state_input, action_input])
     x = tf.keras.layers.Dense(hidden_dim, activation="relu")(concat)
     x = tf.keras.layers.Dense(hidden_dim, activation="relu")(x)
