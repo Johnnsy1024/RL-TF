@@ -1,6 +1,5 @@
 import numpy as np
 import tensorflow as tf
-from loguru import logger
 
 
 def compute_return(rewards, gamma):

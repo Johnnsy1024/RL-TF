@@ -1,5 +1,4 @@
 import tensorflow as tf
-from flags import args
 
 
 def build_actor_model(action_size: int, inputs: tf.keras.Input):

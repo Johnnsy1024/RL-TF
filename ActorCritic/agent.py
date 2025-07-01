@@ -1,7 +1,7 @@
+import numpy as np
+import tensorflow as tf
 from model import build_actor_model, build_critic_model
 from slots import action_dim, state_dim
-import tensorflow as tf
-import numpy as np
 
 
 class ActorCritic:

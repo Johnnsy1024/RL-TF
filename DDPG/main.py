@@ -2,12 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from agent import DDPG
-from model import build_actor_model, build_critic_model
 from slots import (
     ACTION_DIM,
     ACTOR_LR,
     BATCH_SIZE,
-    BUFFER_SIZE,
     CRITIC_LR,
     GAMMA,
     HIDDEN_DIM,
