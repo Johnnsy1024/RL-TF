@@ -14,7 +14,6 @@ class SARSA:
         alpha: float = 0.05,
         gamma: float = 0.95,
     ):  # 显式传入动作数
-        env_name = env.spec.id
         # if env_name != "CliffWalking-v0":
         #     raise ValueError(f"Unsupported environment: {env_name}")
         self.n_actions = env.action_space.n  # 先定义n_actions
