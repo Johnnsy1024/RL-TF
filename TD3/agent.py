@@ -65,9 +65,7 @@ class TD3:
             NOISE_CLIP,
         )
         next_action = self.actor_target(next_state) + noise_target
-        next_action = tf.clip_by_value(
-            next_action, -self.action_bound, self.action_bound
-        )
+        next_action = tf.clip_by_value(next_action, -self.action_bound, self.action_bound)
 
         target_q1 = self.critic_target_1([next_state, next_action])
         target_q2 = self.critic_target_2([next_state, next_action])

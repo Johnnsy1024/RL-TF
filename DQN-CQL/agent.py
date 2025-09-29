@@ -46,7 +46,7 @@ class DQN:
             conservative_loss = tf.reduce_mean(logsumexpq - q_dataset_actions)
             q_loss = (
                 tf.reduce_mean(tf.square(q_target - q_values_w_action))
-                + conservative_loss * 0.02
+                + conservative_loss
             )
         grads = tape.gradient(q_loss, self.q_network.trainable_variables)
         self.q_network.optimizer.apply_gradients(

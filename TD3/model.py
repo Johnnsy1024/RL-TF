@@ -1,4 +1,6 @@
+import numpy as np
 import tensorflow as tf
+from slots import ACTION_DIM, SIGMA
 
 
 def build_actor_model(
@@ -8,15 +10,13 @@ def build_actor_model(
     x = tf.keras.layers.Dense(hidden_dim, activation="relu")(inputs)
     x = tf.keras.layers.Dense(hidden_dim, activation="relu")(x)
     output = tf.keras.layers.Dense(action_dim, activation="tanh")(x)
-    output = output * action_bound
+    output = output * action_bound + SIGMA * np.random.randn(ACTION_DIM)
     return tf.keras.Model(inputs=inputs, outputs=output)
 
 
 def build_critic_model(state_dim: int, action_dim: int, hidden_dim: int):
     state_input = tf.keras.layers.Input(shape=(state_dim,), name="critic_input: state")
-    action_input = tf.keras.layers.Input(
-        shape=(action_dim,), name="critic_input: action"
-    )
+    action_input = tf.keras.layers.Input(shape=(action_dim,), name="critic_input: action")
     concat = tf.keras.layers.Concatenate()([state_input, action_input])
     x = tf.keras.layers.Dense(hidden_dim, activation="relu")(concat)
     x = tf.keras.layers.Dense(hidden_dim, activation="relu")(x)
