@@ -25,7 +25,16 @@ arg_parser.add_argument(
     default="dqn",
 )
 arg_parser.add_argument(
-    "--env_name", type=str, help="environment name", default="MiniGrid-Empty-16x16-v0"
+    "--env_name",
+    type=str,
+    help="environment name",
+    default="MiniGrid-BlockedUnlockPickup-v0",
+)
+arg_parser.add_argument(
+    "--image_embed_size",
+    type=int,
+    help="image embedding size",
+    default=32,
 )
 
 args = arg_parser.parse_args()
